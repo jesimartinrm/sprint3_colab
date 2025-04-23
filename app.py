@@ -208,7 +208,7 @@ elif menu == "⚙️ Feature Selection":
         
         with col2:
             labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Feature Engineering', 'Retained']
-            sizes = [863, 55, 243, 33, 90]
+            sizes = [863, 55, 243, 27, 90]
             colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#6366f1']
             
             fig, ax = plt.subplots()
@@ -333,55 +333,55 @@ elif menu == "📈 EDA":
                     use_container_width=True)
     
 
-# elif menu == "🤖 Final Model":
-#     st.header("Grade Repetition Predictor")
+elif menu == "🤖 Final Model":
+    st.header("Grade Repetition Predictor")
     
-#     # Load model and data
-#     @st.cache_resource
-#     def load_model():
-#         import pickle
-#         import os
-#         # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-#         return pickle.load('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl')
+    # Load model and data
+    @st.cache_resource
+    def load_model():
+        import pickle
+        import os
+        # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
+        return pickle.load('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl')
 
-#     @st.cache_data
-#     def load_holdout():
-#         import os
-#         import pandas as pd
-#         # data_path = os.path.join("data", "holdout.csv")
-#         return pd.read_csv('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv')
+    @st.cache_data
+    def load_holdout():
+        import os
+        import pandas as pd
+        # data_path = os.path.join("data", "holdout.csv")
+        return pd.read_csv('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv')
 
-#     # Load model and data with error handling
-#     try:
-#         model = load_model()
-#         holdout_data = load_holdout()
-#     except Exception as e:
-#         st.error(f"Error loading model or data: {e}")
-#         st.stop()
+    # Load model and data with error handling
+    try:
+        model = load_model()
+        holdout_data = load_holdout()
+    except Exception as e:
+        st.error(f"Error loading model or data: {e}")
+        st.stop()
 
-#     # Display model performance
-#     with st.expander("Model Performance on Holdout Data", expanded=True):
-#         try:
-#             X_holdout = holdout_data.drop("REPEAT", axis=1)
-#             y_true = holdout_data["REPEAT"]
-#             y_pred = model.predict(X_holdout)
+    # Display model performance
+    with st.expander("Model Performance on Holdout Data", expanded=True):
+        try:
+            X_holdout = holdout_data.drop("REPEAT", axis=1)
+            y_true = holdout_data["REPEAT"]
+            y_pred = model.predict(X_holdout)
             
-#             col1, col2, col3 = st.columns(3)
+            col1, col2, col3 = st.columns(3)
             
-#             with col1:
-#                 accuracy = accuracy_score(y_true, y_pred)
-#                 st.metric("Accuracy", f"{accuracy:.1%}")
+            with col1:
+                accuracy = accuracy_score(y_true, y_pred)
+                st.metric("Accuracy", f"{accuracy:.1%}")
             
-#             with col2:
-#                 f1 = f1_score(y_true, y_pred)
-#                 st.metric("F1 Score", f"{f1:.2f}")
+            with col2:
+                f1 = f1_score(y_true, y_pred)
+                st.metric("F1 Score", f"{f1:.2f}")
             
-#             with col3:
-#                 roc_auc = roc_auc_score(y_true, y_pred)
-#                 st.metric("ROC AUC", f"{roc_auc:.2f}")
+            with col3:
+                roc_auc = roc_auc_score(y_true, y_pred)
+                st.metric("ROC AUC", f"{roc_auc:.2f}")
                 
-#         except Exception as e:
-#             st.error(f"Error calculating model performance: {e}")
+        except Exception as e:
+            st.error(f"Error calculating model performance: {e}")
 
     # # Prediction form
     # with st.form("prediction_form"):
