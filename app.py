@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from PIL import Image
+from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
 # Configure page
 st.set_page_config(
@@ -350,22 +351,37 @@ elif menu == "🤖 Final Model":
         data_path = os.path.join("data", "holdout.csv")
         return pd.read_csv(data_path)
 
-    model = load_model()
-    holdout_data = load_holdout()
+    # Load model and data with error handling
+    try:
+        model = load_model()
+        holdout_data = load_holdout()
+    except Exception as e:
+        st.error(f"Error loading model or data: {e}")
+        st.stop()
 
     # Display model performance
-    with st.expander("Model Performance on Holdout Data"):
-        X_holdout = holdout_data.drop("REPEAT", axis=1)
-        y_true = holdout_data["REPEAT"]
-        y_pred = model.predict(X_holdout)
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.1%}")
-        with col2:
-            st.metric("F1 Score", f"{f1_score(y_true, y_pred):.2f}")
-        with col3:
-            st.metric("ROC AUC", f"{roc_auc_score(y_true, y_pred):.2f}")
+    with st.expander("Model Performance on Holdout Data", expanded=True):
+        try:
+            X_holdout = holdout_data.drop("REPEAT", axis=1)
+            y_true = holdout_data["REPEAT"]
+            y_pred = model.predict(X_holdout)
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                accuracy = accuracy_score(y_true, y_pred)
+                st.metric("Accuracy", f"{accuracy:.1%}")
+            
+            with col2:
+                f1 = f1_score(y_true, y_pred)
+                st.metric("F1 Score", f"{f1:.2f}")
+            
+            with col3:
+                roc_auc = roc_auc_score(y_true, y_pred)
+                st.metric("ROC AUC", f"{roc_auc:.2f}")
+                
+        except Exception as e:
+            st.error(f"Error calculating model performance: {e}")
 
     # # Prediction form
     # with st.form("prediction_form"):
