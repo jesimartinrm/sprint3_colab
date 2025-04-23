@@ -89,7 +89,7 @@ if menu == "🏠 Landing Page":
     
     with col2:
         st.image("https://images.unsplash.com/photo-1523050854058-8df90110c9f1", 
-                use_column_width=True, caption="Philippine Students")
+                use_container_width=True, caption="Philippine Students")
 
     # Key Metrics Cards
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
@@ -187,8 +187,8 @@ elif menu == "⚙️ Data Prep & Feature Selection":
             """)
             
         with col2:
-            labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Post-OHE', 'Retained']
-            sizes = [863, 55, 242, 10, 90]
+            labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Feature Engineering', 'Retained']
+            sizes = [863, 55, 243, 27, 90]
             colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#6366f1']
             
             fig, ax = plt.subplots()
@@ -207,7 +207,7 @@ elif menu == "📈 EDA":
         with col1:
             st.image("images/grade_repetition_distribution.png", 
                     caption="Figure 1: Grade Repetition Distribution",
-                    use_column_width=True)
+                    use_container_width=True)
         with col2:
             st.markdown("""
             **Key Observation**:  
@@ -230,54 +230,81 @@ elif menu == "📈 EDA":
         with col2:
             st.image("images/ses_vs_repetition.png",
                     caption="Figure 2: Socioeconomic Status Impact",
-                    use_column_width=True)
+                    use_container_width=True)
 
 elif menu == "🤖 Final Model":
     st.header("Grade Repetition Predictor")
     
-    # Load model
+    # Load model and data
     @st.cache_resource
     def load_model():
         import joblib
-        return joblib.load('grade_repetition_model.pkl')
-    
+        import os
+        model_path = os.path.join("scripts", "gb_tk_cat.pkl")
+        return joblib.load(model_path)
+
+    @st.cache_data
+    def load_holdout():
+        import os
+        import pandas as pd
+        data_path = os.path.join("data", "holdout.csv")
+        return pd.read_csv(data_path)
+
     model = load_model()
-    
-    # Create input form
-    with st.form("prediction_form"):
-        st.subheader("Student Information")
+    holdout_data = load_holdout()
+
+    # Display model performance
+    with st.expander("Model Performance on Holdout Data"):
+        X_holdout = holdout_data.drop("REPEAT", axis=1)
+        y_true = holdout_data["REPEAT"]
+        y_pred = model.predict(X_holdout)
         
         col1, col2, col3 = st.columns(3)
         with col1:
-            ses = st.slider("Socioeconomic Status (1-10)", 1, 10, 5)
-            parent_edu = st.selectbox("Parental Education", ["High School", "College", "Postgrad"])
+            st.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.1%}")
+        with col2:
+            st.metric("F1 Score", f"{f1_score(y_true, y_pred):.2f}")
+        with col3:
+            st.metric("ROC AUC", f"{roc_auc_score(y_true, y_pred):.2f}")
+
+    # Prediction form
+    with st.form("prediction_form"):
+        st.subheader("Predict Student Risk")
+        
+        # Example features - modify based on your actual model features
+        col1, col2 = st.columns(2)
+        with col1:
+            escs = st.number_input("Economic/Social/Cultural Status", -3.0, 3.0, 0.0)
+            st004d01t = st.selectbox("Gender", ["Female", "Male"])
             
         with col2:
-            digital_access = st.radio("Digital Access", ["None", "Limited", "Full"])
-            books_in_home = st.number_input("Books in Home", 0, 500, 25)
-            
-        with col3:
-            school_type = st.selectbox("School Type", ["Public", "Private"])
-            study_time = st.slider("Daily Study Hours", 0.0, 8.0, 2.5)
+            lmins = st.number_input("Learning Minutes", 0, 500, 180)
+            hisei = st.number_input("Highest Parent Education (Years)", 0, 20, 12)
 
-        if st.form_submit_button("Predict Repetition Risk"):
-            # Convert inputs to model format
-            input_data = pd.DataFrame({
-                'ses': [ses],
-                'parent_edu': [parent_edu],
-                'digital_access': [digital_access],
-                'books_in_home': [books_in_home],
-                'school_type': [school_type],
-                'study_time': [study_time]
+        if st.form_submit_button("Generate Prediction"):
+            # Create input DataFrame matching model expectations
+            input_df = pd.DataFrame({
+                "ESCS": [escs],
+                "ST004D01T": [1 if st004d01t == "Male" else 0],
+                "LMINS": [lmins],
+                "HISEI": [hisei]
             })
             
-            # Get prediction
-            prediction = model.predict_proba(input_data)[0][1]
-            risk_level = "High Risk" if prediction > 0.5 else "Low Risk"
+            prediction = model.predict_proba(input_df)[0][1]
             
             # Display results
-            st.metric("Repetition Probability", f"{prediction:.1%}", risk_level)
-            st.progress(prediction)
+            st.subheader("Prediction Results")
+            st.metric("Grade Repetition Risk", 
+                     f"{prediction:.1%}",
+                     "High Risk" if prediction > 0.5 else "Low Risk")
+            
+            # Show feature importance using SHAP
+            explainer = shap.TreeExplainer(model)
+            shap_values = explainer.shap_values(input_df)
+            
+            fig, ax = plt.subplots()
+            shap.plots.waterfall(shap_values[0], max_display=10, show=False)
+            st.pyplot(fig)
 
 # For Recommender System
 elif menu == "🎯 Recommendations":
