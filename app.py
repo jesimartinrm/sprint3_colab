@@ -171,7 +171,7 @@ elif menu == "📊 Data Overview":
             """)
             
         with col2:
-            st.metric("Philippine Students", "7,193", "1.17% of global dataset")
+            st.metric("Philippine Students", "7,193", "1.17% of global dataset", delta_color="off")
             st.metric("Grade Repetition Rate", "25.4%", "+13.4% vs OECD average")
         
         # Add bar chart comparing repetition rates
@@ -199,40 +199,45 @@ elif menu == "⚙️ Feature Selection":
             - 243: Irrelevant features
             - 33: Feature Engineering
             """)
-            
-        with col2:
-            labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Feature Engineering', 'Retained']
-            sizes = [863, 55, 243, 33, 90]
-            colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#6366f1']
-            
-            fig, ax = plt.subplots()
-            ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%',
-                   startangle=90, wedgeprops={'edgecolor': 'white'})
-            ax.axis('equal')
-            st.pyplot(fig)
 
-    st.header("Detailed Feature Selection", divider=True)
-    
-    with st.container:
-        col1, col2 = st.columns([3, 2])
-        with col1:
+        with col2:
             st.image("images/0_Data_Prep_Funnel_Chart.png", 
                     caption="Figure 1: Feature Engineering Funnel Chart",
                     use_container_width=True)
+        
+    #     with col2:
+    #         labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Feature Engineering', 'Retained']
+    #         sizes = [863, 55, 243, 33, 90]
+    #         colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#6366f1']
             
-        with col2:
-            st.markdown("""
-            **Key Observations about the Dataset**:  
-            The dataset initially contained **1,278 features**, but it underwent significant refinement to ensure quality and relevance.  
+    #         fig, ax = plt.subplots()
+    #         ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%',
+    #                startangle=90, wedgeprops={'edgecolor': 'white'})
+    #         ax.axis('equal')
+    #         st.pyplot(fig)
+
+    # st.header("Detailed Feature Selection", divider=True)
     
-            - **863 features** were removed because they exceeded the **20% missing value threshold**, with **484 of these being completely empty**, rendering them unusable for analysis.  
-            - An additional **55 features** were eliminated due to **collinearity**, as they provided redundant information.  
-            - **243 features** were removed for being **irrelevant** to the study's objectives, streamlining the dataset further.  
-            - **33 features**, which represented scores in **Math, Reading, and Science**, were consolidated into **two (2) representative features**, reducing dimensionality while preserving critical information.  
-            - Finally, **4 new features** were added after applying **One Hot Encoding and VIF filtering**, enhancing the dataset's quality and utility.  
+    # with st.container:
+    #     col1, col2 = st.columns([3, 2])
+    #     with col1:
+    #         st.image("images/0_Data_Prep_Funnel_Chart.png", 
+    #                 caption="Figure 1: Feature Engineering Funnel Chart",
+    #                 use_container_width=True)
+            
+    #     with col2:
+    #         st.markdown("""
+    #         **Key Observations about the Dataset**:  
+    #         The dataset initially contained **1,278 features**, but it underwent significant refinement to ensure quality and relevance.  
     
-            By the end of this rigorous filtering process, the dataset was optimized for analysis, retaining only the **90** most meaningful and actionable features.  
-            """)
+    #         - **863 features** were removed because they exceeded the **20% missing value threshold**, with **484 of these being completely empty**, rendering them unusable for analysis.  
+    #         - An additional **55 features** were eliminated due to **collinearity**, as they provided redundant information.  
+    #         - **243 features** were removed for being **irrelevant** to the study's objectives, streamlining the dataset further.  
+    #         - **33 features**, which represented scores in **Math, Reading, and Science**, were consolidated into **two (2) representative features**, reducing dimensionality while preserving critical information.  
+    #         - Finally, **4 new features** were added after applying **One Hot Encoding and VIF filtering**, enhancing the dataset's quality and utility.  
+    
+    #         By the end of this rigorous filtering process, the dataset was optimized for analysis, retaining only the **90** most meaningful and actionable features.  
+    #         """)
     
 
 # EDA Section
