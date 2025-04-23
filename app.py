@@ -335,7 +335,10 @@ elif menu == "📈 EDA":
 
 elif menu == "🤖 Final Model":
     st.header("Grade Repetition Predictor")
-    
+
+    # Debugging: Show section is loading
+    st.write("Section initialization started...")
+
     # Import necessary functions
     from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
     import os
@@ -356,53 +359,61 @@ elif menu == "🤖 Final Model":
     # """
     # st.markdown(html_temp, unsafe_allow_html = True)
 
-    # Load model and data
-    @st.cache_data
+    # Load model and data with enhanced debugging
+    @st.cache_resource
     def load_model():
         try:
-            # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-            with open('scripts/gb_tk_cat.pkl', 'rb') as f:
-                return pickle.load(f)
-        except FileNotFoundError:
-            st.error("Model file not found. Please check the file path.")
-            return None
+            st.write("Attempting model load...")
+            model_path = os.path.join("scripts", "gb_tk_cat.pkl")
+            with open(model_path, 'rb') as f:
+                model = pickle.load(f)
+            st.write("Model loaded successfully!")
+            return model
         except Exception as e:
-            st.error(f"Error loading model: {e}")
+            st.error(f"Model loading failed: {str(e)}")
             return None
 
     @st.cache_data
     def load_holdout():
         try:
-            # data_path = os.path.join("data", "holdout.csv")
-            return pd.read_csv('data/holdout.csv')
-        except FileNotFoundError:
-            st.error("Holdout data file not found. Please check the file path.")
-            return None
+            st.write("Attempting holdout data load...")
+            data_path = os.path.join("data", "holdout.csv")
+            df = pd.read_csv(data_path)
+            st.write(f"Data loaded successfully! Shape: {df.shape}")
+            return df
         except Exception as e:
-            st.error(f"Error loading holdout data: {e}")
+            st.error(f"Data loading failed: {str(e)}")
             return None
 
-    # Load model and data with error handling
-    try:
+    # Load resources with progress indicators
+    with st.spinner("Loading resources..."):
         model = load_model()
         holdout_data = load_holdout()
-    except Exception as e:
-        st.error(f"Error loading model or data: {e}")
-        st.stop()
 
     if model is None or holdout_data is None:
+        st.error("Critical resources failed to load. Stopping execution.")
         st.stop()
 
-    # Display model performance
+    # Debugging: Show data overview
+    st.write("Holdout Data Preview:")
+    st.write(holdout_data.head(2))
+    st.write(f"Columns in holdout data: {list(holdout_data.columns)}")
+
     try:
+        st.write("Preparing holdout data...")
+        if "REPEAT" not in holdout_data.columns:
+            raise KeyError("REPEAT column not found in holdout data")
+            
         X_holdout = holdout_data.drop("REPEAT", axis=1)
         y_true = holdout_data["REPEAT"]
+        
+        st.write("Generating predictions...")
         y_pred = model.predict(X_holdout)
         
         # Create columns for metrics
+        st.write("Creating metrics display...")
         col1, col2, col3 = st.columns(3)
         
-        # Calculate and display metrics
         with col1:
             accuracy = accuracy_score(y_true, y_pred)
             st.metric("Accuracy", f"{accuracy:.1%}")
@@ -416,7 +427,10 @@ elif menu == "🤖 Final Model":
             st.metric("ROC AUC", f"{roc_auc:.2f}")
             
     except Exception as e:
-        st.error(f"Error calculating model performance: {e}")
+        st.error(f"Processing error: {str(e)}")
+        st.stop()
+
+    st.success("Section loaded successfully!")
 
     # # Prediction form
     # with st.form("prediction_form"):
