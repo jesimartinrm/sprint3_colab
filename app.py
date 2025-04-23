@@ -33,6 +33,20 @@ st.markdown("""
         margin: 10px 0;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
+    /* Custom metric styling */
+    .stMetric [data-testid="stMetricLabel"] {
+        color: #4b5563 !important;  /* Neutral dark for label */
+    }
+    
+    .stMetric [data-testid="stMetricValue"] {
+        color: #1f2937 !important;  /* Darker font for values */
+        font-size: 1.5rem !important;
+    }
+    
+    .stMetric [data-testid="stMetricDelta"] {
+        color: #dc2626 !important;  /* Red color for delta */
+        font-size: 0.9rem !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -217,6 +231,70 @@ elif menu == "📈 EDA":
             st.image("images/ses_vs_repetition.png",
                     caption="Figure 2: Socioeconomic Status Impact",
                     use_column_width=True)
+
+elif menu == "🤖 Final Model":
+    st.header("Grade Repetition Predictor")
+    
+    # Load model
+    @st.cache_resource
+    def load_model():
+        import joblib
+        return joblib.load('grade_repetition_model.pkl')
+    
+    model = load_model()
+    
+    # Create input form
+    with st.form("prediction_form"):
+        st.subheader("Student Information")
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            ses = st.slider("Socioeconomic Status (1-10)", 1, 10, 5)
+            parent_edu = st.selectbox("Parental Education", ["High School", "College", "Postgrad"])
+            
+        with col2:
+            digital_access = st.radio("Digital Access", ["None", "Limited", "Full"])
+            books_in_home = st.number_input("Books in Home", 0, 500, 25)
+            
+        with col3:
+            school_type = st.selectbox("School Type", ["Public", "Private"])
+            study_time = st.slider("Daily Study Hours", 0.0, 8.0, 2.5)
+
+        if st.form_submit_button("Predict Repetition Risk"):
+            # Convert inputs to model format
+            input_data = pd.DataFrame({
+                'ses': [ses],
+                'parent_edu': [parent_edu],
+                'digital_access': [digital_access],
+                'books_in_home': [books_in_home],
+                'school_type': [school_type],
+                'study_time': [study_time]
+            })
+            
+            # Get prediction
+            prediction = model.predict_proba(input_data)[0][1]
+            risk_level = "High Risk" if prediction > 0.5 else "Low Risk"
+            
+            # Display results
+            st.metric("Repetition Probability", f"{prediction:.1%}", risk_level)
+            st.progress(prediction)
+
+# For Recommender System
+elif menu == "🎯 Recommendations":
+    st.header("Personalized Recommendations")
+    
+    # Add similar model loading and input processing
+    # Use feature importance from model to generate recommendations
+    # Example:
+    if 'prediction' in locals():
+        st.subheader("Recommended Interventions")
+        
+        if prediction > 0.5:
+            st.markdown("""
+            - **Priority 1:** Improve digital access through school device loans
+            - **Priority 2:** Implement after-school tutoring program
+            - **Priority 3:** Parental education workshops
+            """)
 
 # Add other sections following similar patterns
 
