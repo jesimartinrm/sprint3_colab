@@ -340,10 +340,10 @@ elif menu == "🤖 Final Model":
     # Load model and data
     @st.cache_resource
     def load_model():
-        import joblib
+        import pickle
         import os
         # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-        return joblib.load('C:\Users\jesim\2025 ML\Eskwelabs\Sprint 3\Sprint Project\Streamlit\sprint3_colab\scripts\gb_tk_cat.pkl')
+        return pickle.load('C:\Users\jesim\2025 ML\Eskwelabs\Sprint 3\Sprint Project\Streamlit\sprint3_colab\scripts\gb_tk_cat.pkl')
 
     @st.cache_data
     def load_holdout():
