@@ -164,7 +164,7 @@ elif menu == "📊 Data Overview":
         for idx, category in enumerate(categories):
             with cols[idx]:
                 st.markdown(f"""
-                <div style="border-left: 4px solid {category['color']; padding-left: 1rem; margin: 1rem 0;">
+                <div style="border-left: 4px solid {category['color']}; padding-left: 1rem; margin: 1rem 0;">
                     <h3 style="color: {category['color']};">{category['title']}</h3>
                     <ul style="color: #6b7280;">
                         {''.join([f'<li>{item}</li>' for item in category['items']])}
