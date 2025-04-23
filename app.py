@@ -276,96 +276,96 @@ elif menu == "📈 EDA":
             """)
     
 
-elif menu == "🤖 Final Model":
-    st.header("Grade Repetition Predictor")
+# elif menu == "🤖 Final Model":
+#     st.header("Grade Repetition Predictor")
     
-    # Load model and data
-    @st.cache_resource
-    def load_model():
-        import joblib
-        import os
-        model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-        return joblib.load(model_path)
+#     # Load model and data
+#     @st.cache_resource
+#     def load_model():
+#         import joblib
+#         import os
+#         model_path = os.path.join("scripts", "gb_tk_cat.pkl")
+#         return joblib.load(model_path)
 
-    @st.cache_data
-    def load_holdout():
-        import os
-        import pandas as pd
-        data_path = os.path.join("data", "holdout.csv")
-        return pd.read_csv(data_path)
+#     @st.cache_data
+#     def load_holdout():
+#         import os
+#         import pandas as pd
+#         data_path = os.path.join("data", "holdout.csv")
+#         return pd.read_csv(data_path)
 
-    model = load_model()
-    holdout_data = load_holdout()
+#     model = load_model()
+#     holdout_data = load_holdout()
 
-    # Display model performance
-    with st.expander("Model Performance on Holdout Data"):
-        X_holdout = holdout_data.drop("REPEAT", axis=1)
-        y_true = holdout_data["REPEAT"]
-        y_pred = model.predict(X_holdout)
+#     # Display model performance
+#     with st.expander("Model Performance on Holdout Data"):
+#         X_holdout = holdout_data.drop("REPEAT", axis=1)
+#         y_true = holdout_data["REPEAT"]
+#         y_pred = model.predict(X_holdout)
         
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.1%}")
-        with col2:
-            st.metric("F1 Score", f"{f1_score(y_true, y_pred):.2f}")
-        with col3:
-            st.metric("ROC AUC", f"{roc_auc_score(y_true, y_pred):.2f}")
+#         col1, col2, col3 = st.columns(3)
+#         with col1:
+#             st.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.1%}")
+#         with col2:
+#             st.metric("F1 Score", f"{f1_score(y_true, y_pred):.2f}")
+#         with col3:
+#             st.metric("ROC AUC", f"{roc_auc_score(y_true, y_pred):.2f}")
 
-    # Prediction form
-    with st.form("prediction_form"):
-        st.subheader("Predict Student Risk")
+#     # Prediction form
+#     with st.form("prediction_form"):
+#         st.subheader("Predict Student Risk")
         
-        # Example features - modify based on your actual model features
-        col1, col2 = st.columns(2)
-        with col1:
-            escs = st.number_input("Economic/Social/Cultural Status", -3.0, 3.0, 0.0)
-            st004d01t = st.selectbox("Gender", ["Female", "Male"])
+#         # Example features - modify based on your actual model features
+#         col1, col2 = st.columns(2)
+#         with col1:
+#             escs = st.number_input("Economic/Social/Cultural Status", -3.0, 3.0, 0.0)
+#             st004d01t = st.selectbox("Gender", ["Female", "Male"])
             
-        with col2:
-            lmins = st.number_input("Learning Minutes", 0, 500, 180)
-            hisei = st.number_input("Highest Parent Education (Years)", 0, 20, 12)
+#         with col2:
+#             lmins = st.number_input("Learning Minutes", 0, 500, 180)
+#             hisei = st.number_input("Highest Parent Education (Years)", 0, 20, 12)
 
-        if st.form_submit_button("Generate Prediction"):
-            # Create input DataFrame matching model expectations
-            input_df = pd.DataFrame({
-                "ESCS": [escs],
-                "ST004D01T": [1 if st004d01t == "Male" else 0],
-                "LMINS": [lmins],
-                "HISEI": [hisei]
-            })
+#         if st.form_submit_button("Generate Prediction"):
+#             # Create input DataFrame matching model expectations
+#             input_df = pd.DataFrame({
+#                 "ESCS": [escs],
+#                 "ST004D01T": [1 if st004d01t == "Male" else 0],
+#                 "LMINS": [lmins],
+#                 "HISEI": [hisei]
+#             })
             
-            prediction = model.predict_proba(input_df)[0][1]
+#             prediction = model.predict_proba(input_df)[0][1]
             
-            # Display results
-            st.subheader("Prediction Results")
-            st.metric("Grade Repetition Risk", 
-                     f"{prediction:.1%}",
-                     "High Risk" if prediction > 0.5 else "Low Risk")
+#             # Display results
+#             st.subheader("Prediction Results")
+#             st.metric("Grade Repetition Risk", 
+#                      f"{prediction:.1%}",
+#                      "High Risk" if prediction > 0.5 else "Low Risk")
             
-            # Show feature importance using SHAP
-            explainer = shap.TreeExplainer(model)
-            shap_values = explainer.shap_values(input_df)
+#             # Show feature importance using SHAP
+#             explainer = shap.TreeExplainer(model)
+#             shap_values = explainer.shap_values(input_df)
             
-            fig, ax = plt.subplots()
-            shap.plots.waterfall(shap_values[0], max_display=10, show=False)
-            st.pyplot(fig)
+#             fig, ax = plt.subplots()
+#             shap.plots.waterfall(shap_values[0], max_display=10, show=False)
+#             st.pyplot(fig)
 
-# For Recommender System
-elif menu == "🎯 Recommendations":
-    st.header("Personalized Recommendations")
+# # For Recommender System
+# elif menu == "🎯 Recommendations":
+#     st.header("Personalized Recommendations")
     
-    # Add similar model loading and input processing
-    # Use feature importance from model to generate recommendations
-    # Example:
-    if 'prediction' in locals():
-        st.subheader("Recommended Interventions")
+#     # Add similar model loading and input processing
+#     # Use feature importance from model to generate recommendations
+#     # Example:
+#     if 'prediction' in locals():
+#         st.subheader("Recommended Interventions")
         
-        if prediction > 0.5:
-            st.markdown("""
-            - **Priority 1:** Improve digital access through school device loans
-            - **Priority 2:** Implement after-school tutoring program
-            - **Priority 3:** Parental education workshops
-            """)
+#         if prediction > 0.5:
+#             st.markdown("""
+#             - **Priority 1:** Improve digital access through school device loans
+#             - **Priority 2:** Implement after-school tutoring program
+#             - **Priority 3:** Parental education workshops
+#             """)
 
 # Add other sections following similar patterns
 
