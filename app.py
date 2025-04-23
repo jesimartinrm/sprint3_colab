@@ -360,8 +360,8 @@ elif menu == "🤖 Final Model":
     @st.cache_data
     def load_model():
         try:
-            model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-            with open(model_path, 'rb') as f:
+            # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
+            with open('scripts/gb_tk_cat.pkl', 'rb') as f:
                 return pickle.load(f)
         except FileNotFoundError:
             st.error("Model file not found. Please check the file path.")
@@ -373,8 +373,8 @@ elif menu == "🤖 Final Model":
     @st.cache_data
     def load_holdout():
         try:
-            data_path = os.path.join("data", "holdout.csv")
-            return pd.read_csv(data_path)
+            # data_path = os.path.join("data", "holdout.csv")
+            return pd.read_csv('data/holdout.csv')
         except FileNotFoundError:
             st.error("Holdout data file not found. Please check the file path.")
             return None
