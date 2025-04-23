@@ -342,42 +342,56 @@ elif menu == "🤖 Final Model":
     import pickle
     import pandas as pd
 
-    # Load model and data
-    @st.cache_data
-    def load_model():
-        try:
-            model_path = 'C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl'
-            with open(model_path, 'rb') as f:
-                return pickle.load(f)
-        except FileNotFoundError:
-            st.error("Model file not found. Please check the file path.")
-            return None
-        except Exception as e:
-            st.error(f"Error loading model: {e}")
-            return None
+    # read model and holdout data
+    model = pickle.load(open('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl', 'rb'))
+    holdout_data = pd.read_csv('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv', index_col=0)
+    # holdout_transactions = X_holdout.index.to_list()
 
-    @st.cache_data
-    def load_holdout():
-        try:
-            data_path = 'C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv'
-            return pd.read_csv(data_path)
-        except FileNotFoundError:
-            st.error("Holdout data file not found. Please check the file path.")
-            return None
-        except Exception as e:
-            st.error(f"Error loading holdout data: {e}")
-            return None
 
-    # Load model and data with error handling
-    try:
-        model = load_model()
-        holdout_data = load_holdout()
-    except Exception as e:
-        st.error(f"Error loading model or data: {e}")
-        st.stop()
+    st.title("Transaction Fraud Detection")
+    html_temp = """
+    <div style="background:#025246 ;padding:10px">
+    <h2 style="color:white;text-align:center;"> Credit Card Fraud Detection ML App </h2>
+    </div>
+    """
+    st.markdown(html_temp, unsafe_allow_html = True)
 
-    if model is None or holdout_data is None:
-        st.stop()
+    # # Load model and data
+    # @st.cache_data
+    # def load_model():
+    #     try:
+    #         model_path = 'C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl'
+    #         with open(model_path, 'rb') as f:
+    #             return pickle.load(f)
+    #     except FileNotFoundError:
+    #         st.error("Model file not found. Please check the file path.")
+    #         return None
+    #     except Exception as e:
+    #         st.error(f"Error loading model: {e}")
+    #         return None
+
+    # @st.cache_data
+    # def load_holdout():
+    #     try:
+    #         data_path = 'C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv'
+    #         return pd.read_csv(data_path)
+    #     except FileNotFoundError:
+    #         st.error("Holdout data file not found. Please check the file path.")
+    #         return None
+    #     except Exception as e:
+    #         st.error(f"Error loading holdout data: {e}")
+    #         return None
+
+    # # Load model and data with error handling
+    # try:
+    #     model = load_model()
+    #     holdout_data = load_holdout()
+    # except Exception as e:
+    #     st.error(f"Error loading model or data: {e}")
+    #     st.stop()
+
+    # if model is None or holdout_data is None:
+    #     st.stop()
 
     # Display model performance
     try:
