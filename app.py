@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS styling with dark fonts
+# Custom CSS styling
 st.markdown("""
 <style>
     [data-testid="stAppViewContainer"] {
@@ -20,7 +20,10 @@ st.markdown("""
     
     section[data-testid="stSidebar"] {
         background-color: #3730a3 !important;
-        color: white !important;
+    }
+    
+    section[data-testid="stSidebar"] * {
+        color: #ffffff !important;  /* White font for sidebar */
     }
     
     .metric-card {
@@ -29,14 +32,6 @@ st.markdown("""
         padding: 20px;
         margin: 10px 0;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    h1, h2, h3, h4, h5, h6 {
-        color: #2d3748 !important;
-    }
-    
-    p, li {
-        color: #4a5568 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -53,14 +48,13 @@ with st.sidebar:
     menu = st.radio("", [
         "🏠 Landing Page",
         "📊 Data Overview", 
-        "🧹 Data Preparation",
-        "⚙️ Feature Selection",
+        "⚙️ Data Prep & Feature Selection",
         "📈 EDA",
         "🤖 Final Model",
         "💡 Feature Importance",
-        "🎯 Recommendations",
-        "🤝 Recommender System"
+        "🎯 Recommendations"
     ], label_visibility="collapsed")
+
 
 # Main content sections
 if menu == "🏠 Landing Page":
@@ -90,7 +84,7 @@ if menu == "🏠 Landing Page":
         st.markdown("""
         <div class="metric-card">
             <h3 style="color: #3730a3; margin: 0;">📚 Total Students</h3>
-            <p style="font-size: 2rem; margin: 10px 0;">7,233</p>
+            <p style="font-size: 2rem; margin: 10px 0;">7,193</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -160,26 +154,25 @@ elif menu == "📊 Data Overview":
         ax.set_ylabel('Repetition Rate (%)')
         st.pyplot(fig)
 
-# Data Preparation Section
-elif menu == "🧹 Data Preparation":
-    st.header("Data Preparation Pipeline")
+# Combined Data Preparation & Feature Selection
+elif menu == "⚙️ Data Prep & Feature Selection":
+    st.header("Data Preparation & Feature Selection")
     
-    with st.expander("📉 Feature Reduction Process", expanded=True):
+    with st.expander("🔧 Feature Engineering Process", expanded=True):
         col1, col2 = st.columns([1, 2])
         with col1:
             st.markdown("""
             **Original Features**: 1,278  
             **Final Features**: 90  
             
-            **Removal Criteria**:
-            - 863: Excessive missing values (484 completely empty)
-            - 55: Collinearity issues
-            - 242: Irrelevant to analysis
+            **Feature Reduction**:
+            - 863: High missing values (484 empty)
+            - 55: Collinear features
+            - 242: Irrelevant features
             - 10: Post-OHE removal
             """)
             
         with col2:
-            # Create feature reduction pie chart
             labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Post-OHE', 'Retained']
             sizes = [863, 55, 242, 10, 90]
             colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#6366f1']
@@ -189,6 +182,41 @@ elif menu == "🧹 Data Preparation":
                    startangle=90, wedgeprops={'edgecolor': 'white'})
             ax.axis('equal')
             st.pyplot(fig)
+
+# EDA Section with New Format
+elif menu == "📈 EDA":
+    st.header("Exploratory Data Analysis")
+    
+    # Example EDA Item 1
+    with st.container():
+        col1, col2 = st.columns([3, 2])
+        with col1:
+            st.image("images/grade_repetition_distribution.png", 
+                    caption="Figure 1: Grade Repetition Distribution",
+                    use_column_width=True)
+        with col2:
+            st.markdown("""
+            **Key Observation**:  
+            25.4% of Filipino students reported repeating at least one grade,
+            significantly higher than the OECD average of 11%. The distribution
+            shows consistent patterns across different geographic regions.
+            """)
+    
+    st.divider()
+    
+    # Example EDA Item 2
+    with st.container():
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            st.markdown("""
+            **SES vs Repetition Rate**:  
+            Students from lower socioeconomic status (SES) families show
+            3x higher repetition rates compared to high SES counterparts.
+            """)
+        with col2:
+            st.image("images/ses_vs_repetition.png",
+                    caption="Figure 2: Socioeconomic Status Impact",
+                    use_column_width=True)
 
 # Add other sections following similar patterns
 
