@@ -336,20 +336,37 @@ elif menu == "📈 EDA":
 elif menu == "🤖 Final Model":
     st.header("Grade Repetition Predictor")
     
+    # Import necessary functions
+    from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+    import os
+    import pickle
+    import pandas as pd
+
     # Load model and data
-    @st.cache_resource
+    @st.cache_data
     def load_model():
-        import pickle
-        import os
-        # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-        return pickle.load('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl')
+        try:
+            model_path = 'C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl'
+            with open(model_path, 'rb') as f:
+                return pickle.load(f)
+        except FileNotFoundError:
+            st.error("Model file not found. Please check the file path.")
+            return None
+        except Exception as e:
+            st.error(f"Error loading model: {e}")
+            return None
 
     @st.cache_data
     def load_holdout():
-        import os
-        import pandas as pd
-        # data_path = os.path.join("data", "holdout.csv")
-        return pd.read_csv('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv')
+        try:
+            data_path = 'C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv'
+            return pd.read_csv(data_path)
+        except FileNotFoundError:
+            st.error("Holdout data file not found. Please check the file path.")
+            return None
+        except Exception as e:
+            st.error(f"Error loading holdout data: {e}")
+            return None
 
     # Load model and data with error handling
     try:
@@ -359,29 +376,33 @@ elif menu == "🤖 Final Model":
         st.error(f"Error loading model or data: {e}")
         st.stop()
 
+    if model is None or holdout_data is None:
+        st.stop()
+
     # Display model performance
-    with st.expander("Model Performance on Holdout Data", expanded=True):
-        try:
-            X_holdout = holdout_data.drop("REPEAT", axis=1)
-            y_true = holdout_data["REPEAT"]
-            y_pred = model.predict(X_holdout)
+    try:
+        X_holdout = holdout_data.drop("REPEAT", axis=1)
+        y_true = holdout_data["REPEAT"]
+        y_pred = model.predict(X_holdout)
+        
+        # Create columns for metrics
+        col1, col2, col3 = st.columns(3)
+        
+        # Calculate and display metrics
+        with col1:
+            accuracy = accuracy_score(y_true, y_pred)
+            st.metric("Accuracy", f"{accuracy:.1%}")
+        
+        with col2:
+            f1 = f1_score(y_true, y_pred)
+            st.metric("F1 Score", f"{f1:.2f}")
+        
+        with col3:
+            roc_auc = roc_auc_score(y_true, y_pred)
+            st.metric("ROC AUC", f"{roc_auc:.2f}")
             
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                accuracy = accuracy_score(y_true, y_pred)
-                st.metric("Accuracy", f"{accuracy:.1%}")
-            
-            with col2:
-                f1 = f1_score(y_true, y_pred)
-                st.metric("F1 Score", f"{f1:.2f}")
-            
-            with col3:
-                roc_auc = roc_auc_score(y_true, y_pred)
-                st.metric("ROC AUC", f"{roc_auc:.2f}")
-                
-        except Exception as e:
-            st.error(f"Error calculating model performance: {e}")
+    except Exception as e:
+        st.error(f"Error calculating model performance: {e}")
 
     # # Prediction form
     # with st.form("prediction_form"):
