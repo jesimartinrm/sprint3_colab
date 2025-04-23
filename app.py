@@ -217,8 +217,6 @@ elif menu == "⚙️ Feature Selection":
             st.pyplot(fig)
 
     with st.expander("🔧 Feature Engineering Process (Detailed)", expanded=True):
-    
-    with st.container():
         col1, col2 = st.columns([3, 2])
         with col1:
             st.image("images/0_Data_Prep_Funnel_Chart.png", 
