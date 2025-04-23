@@ -1,4 +1,5 @@
 import streamlit as st
+import pickle
 import pandas as pd
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -43,13 +44,13 @@ st.markdown("""
         color: #1f2937 !important;  /* Darker font for values */
         font-size: 1.5rem !important;
     }
-    
-    .stMetric [data-testid="stMetricDelta"] {
-        color: #dc2626 !important;  /* Red color for delta */
-        font-size: 0.9rem !important;
-    }
 </style>
 """, unsafe_allow_html=True)
+    
+    # .stMetric [data-testid="stMetricDelta"] {
+    #     color: #dc2626 !important;  /* Red color for delta */
+    #     font-size: 0.9rem !important;
+    # }
 
 # Sidebar navigation
 with st.sidebar:
@@ -173,7 +174,7 @@ elif menu == "📊 Data Overview":
             
         with col2:
             st.metric(label = "Philippine Students", value = "7,193", delta = "1.17% of global dataset", delta_color="off")
-            st.metric("Grade Repetition Rate", "25.4%", "+13.4% vs OECD average")
+            st.metric(label = "Grade Repetition Rate", value = "25.4%", delta = "+13.4% vs OECD average", delta_color="red")
         
         # Add bar chart comparing repetition rates
         fig, ax = plt.subplots()
@@ -341,15 +342,15 @@ elif menu == "🤖 Final Model":
     def load_model():
         import joblib
         import os
-        model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-        return joblib.load(model_path)
+        # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
+        return joblib.load('C:\Users\jesim\2025 ML\Eskwelabs\Sprint 3\Sprint Project\Streamlit\sprint3_colab\scripts\gb_tk_cat.pkl')
 
     @st.cache_data
     def load_holdout():
         import os
         import pandas as pd
-        data_path = os.path.join("data", "holdout.csv")
-        return pd.read_csv(data_path)
+        # data_path = os.path.join("data", "holdout.csv")
+        return pd.read_csv('C:\Users\jesim\2025 ML\Eskwelabs\Sprint 3\Sprint Project\Streamlit\sprint3_colab\data\holdout.csv')
 
     # Load model and data with error handling
     try:
