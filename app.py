@@ -172,7 +172,7 @@ elif menu == "📊 Data Overview":
             """)
             
         with col2:
-            st.metric("Philippine Students", "7,193", "1.17% of global dataset", delta_color="off")
+            st.metric(label = "Philippine Students", value = "7,193", delta = "1.17% of global dataset", delta_color="off")
             st.metric("Grade Repetition Rate", "25.4%", "+13.4% vs OECD average")
         
         # Add bar chart comparing repetition rates
