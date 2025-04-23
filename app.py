@@ -210,9 +210,11 @@ elif menu == "⚙️ Feature Selection":
                    startangle=90, wedgeprops={'edgecolor': 'white'})
             ax.axis('equal')
             st.pyplot(fig)
+
+    st.header("Detailed Feature Selection", divider=True)
     
-    with st.expander("🔧 Feature Engineering Funnel Chart (Detailed)", expanded=True):
-        col1, col2 = st.columns([1, 2])
+    with st.container:
+        col1, col2 = st.columns([3, 2])
         with col1:
             st.image("images/0_Data_Prep_Funnel_Chart.png", 
                     caption="Figure 1: Feature Engineering Funnel Chart",
