@@ -343,14 +343,14 @@ elif menu == "🤖 Final Model":
         import pickle
         import os
         # model_path = os.path.join("scripts", "gb_tk_cat.pkl")
-        return pickle.load('C:\Users\jesim\2025 ML\Eskwelabs\Sprint 3\Sprint Project\Streamlit\sprint3_colab\scripts\gb_tk_cat.pkl')
+        return pickle.load('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl')
 
     @st.cache_data
     def load_holdout():
         import os
         import pandas as pd
         # data_path = os.path.join("data", "holdout.csv")
-        return pd.read_csv('C:\Users\jesim\2025 ML\Eskwelabs\Sprint 3\Sprint Project\Streamlit\sprint3_colab\data\holdout.csv')
+        return pd.read_csv('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv')
 
     # Load model and data with error handling
     try:
