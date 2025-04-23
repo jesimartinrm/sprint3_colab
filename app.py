@@ -124,31 +124,37 @@ if menu == "🏠 Landing Page":
     
     findings = [
         {"icon": "📚", "title": "Access to Books", 
-         "content": "Fewer books of certain types don’t raise the likelihood of predicting a student as a repeater"},
+         "content": "Fewer books of certain types don’t raise the likelihood of predicting a student as a repeater."},
         {"icon": "👨🎓", "title": "School Engagement", 
-         "content": "A student's engagement in school plays a factor in repeating a grade"},
+         "content": "A student's engagement in school plays a factor in repeating a grade."},
         {"icon": "💻", "title": "Digital Access and Usage", 
-         "content": "Less access to digital tools as well as improper usage plays a factor in repeating a grade"},
+         "content": "Less access to digital tools as well as improper usage plays a factor in repeating a grade."},
         {"icon": "⏳", "title": "Learning Time", 
-         "content": "More time spent learning leads to better performance and a lower chance of repeating a grade"},
+         "content": "More time spent learning leads to better performance and a lower chance of repeating a grade."},
         {"icon": "📅", "title": "School Absences", 
-         "content": "Prolonged absence in school increases the chance of repeating a grade"},
+         "content": "Prolonged absence in school increases the chance of repeating a grade."},
         {"icon": "❤️", "title": "Sense of Belonging", 
-         "content": "Increased feelings of safety and belongingness lower the chance of repeating a grade"},
-        {"icon": "🧠", "title": "Student Curiosity", 
-         "content": "The more curious and engaged a student is, the lower the chance of repeating a grade"}
+         "content": "Increased feelings of safety and belongingness lower the chance of repeating a grade."},
+        {"icon": "🧠", "title": "Student Curiosity and Engagement", 
+         "content": "The more curious and engaged a student is, the lower the chance of repeating a grade."}
     ]
     
-    cols = st.columns(3)
-    for idx, finding in enumerate(findings):
-        with cols[idx]:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div style="font-size: 2rem; margin-bottom: 10px;">{finding['icon']}</div>
-                <h3 style="color: #3730a3; margin: 0 0 10px 0;">{finding['title']}</h3>
-                <p style="color: #6b7280;">{finding['content']}</p>
-            </div>
-            """, unsafe_allow_html=True)
+    # Create two rows of columns
+    for i in range(2):
+        cols = st.columns(3)
+        for j in range(3):
+            idx = i * 3 + j
+            if idx >= len(findings):
+                break
+            finding = findings[idx]
+            with cols[j]:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">{finding['icon']}</div>
+                    <h3 style="color: #3730a3; margin: 0 0 10px 0;">{finding['title']}</h3>
+                    <p style="color: #6b7280;">{finding['content']}</p>
+                </div>
+                """, unsafe_allow_html=True)
 
 # Dataset Overview Section
 elif menu == "📊 Data Overview":
@@ -179,7 +185,7 @@ elif menu == "📊 Data Overview":
 # Combined Data Preparation & Feature Selection
 elif menu == "⚙️ Feature Selection":
     st.header("Data Preparation & Feature Selection")
-    
+        
     with st.expander("🔧 Feature Engineering Process (Summary)", expanded=True):
         col1, col2 = st.columns([1, 2])
         with col1:
@@ -190,13 +196,13 @@ elif menu == "⚙️ Feature Selection":
             **Feature Reduction**:
             - 863: High missing values (484 empty)
             - 55: Collinear features
-            - 242: Irrelevant features
-            - 27: Feature Engineering
+            - 243: Irrelevant features
+            - 33: Feature Engineering
             """)
             
         with col2:
             labels = ['Missing Values', 'Collinearity', 'Irrelevance', 'Feature Engineering', 'Retained']
-            sizes = [863, 55, 243, 27, 90]
+            sizes = [863, 55, 243, 33, 90]
             colors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#6366f1']
             
             fig, ax = plt.subplots()
@@ -204,7 +210,7 @@ elif menu == "⚙️ Feature Selection":
                    startangle=90, wedgeprops={'edgecolor': 'white'})
             ax.axis('equal')
             st.pyplot(fig)
-
+    
     with st.expander("🔧 Feature Engineering Funnel Chart (Detailed)", expanded=True):
         col1, col2 = st.columns([1, 2])
         with col1:
@@ -216,22 +222,22 @@ elif menu == "⚙️ Feature Selection":
             st.markdown("""
             **Key Observations about the Dataset**:  
             The dataset initially contained **1,278 features**, but it underwent significant refinement to ensure quality and relevance.  
-
+    
             - **863 features** were removed because they exceeded the **20% missing value threshold**, with **484 of these being completely empty**, rendering them unusable for analysis.  
             - An additional **55 features** were eliminated due to **collinearity**, as they provided redundant information.  
             - **243 features** were removed for being **irrelevant** to the study's objectives, streamlining the dataset further.  
             - **33 features**, which represented scores in **Math, Reading, and Science**, were consolidated into **two (2) representative features**, reducing dimensionality while preserving critical information.  
             - Finally, **4 new features** were added after applying **One Hot Encoding and VIF filtering**, enhancing the dataset's quality and utility.  
-
+    
             By the end of this rigorous filtering process, the dataset was optimized for analysis, retaining only the **90** most meaningful and actionable features.  
             """)
     
 
 # EDA Section
 elif menu == "📈 EDA":
-    st.header("Exploratory Data Analysis")
+    st.header("Theme 1: Engagement in School", divider=True)
     
-    # EDA Item 1
+    # EDA Item 1.1
     with st.container():
         col1, col2 = st.columns([3, 2])
         with col1:
@@ -247,7 +253,7 @@ elif menu == "📈 EDA":
     
     st.divider()
     
-    # EDA Item 2
+    # EDA Item 1.2
     with st.container():
         col1, col2 = st.columns([2, 3])
         with col1:
@@ -262,7 +268,7 @@ elif menu == "📈 EDA":
 
     st.divider()
 
-    # EDA Item 3
+    # EDA Item 1.3
     with st.container():
         col1, col2 = st.columns([3, 2])
         with col1:
@@ -274,6 +280,51 @@ elif menu == "📈 EDA":
             **Standardized Testing**:  
             Grade Repeaters perform below average PISA scores for Mathematics, Reading and Science.
             """)
+
+    st.header("Theme 2: Socioeconomic Profile", divider=True)
+    
+    # EDA Item 2.1
+    with st.container():
+        col1, col2 = st.columns([3, 2])
+        with col1:
+            st.markdown("""
+            **Parental Education**:  
+            A large proportion of Repeaters have parents with higher levels of education.
+            """)
+        with col2:
+            st.image("images/4_EDA_2_Parental_Education.png", 
+                    caption="Figure 4: Grade Repetition vs Parental Education",
+                    use_container_width=True)
+    
+    st.divider()
+    
+    # EDA Item 2.2
+    with st.container():
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            st.image("images/5_EDA_2_Support.png",
+                    caption="Figure 5: Grade Repetition vs Support Received",
+                    use_container_width=True)
+        with col2:
+            st.markdown("""
+            **Familial and Teacher Support**:  
+            Grade Repeaters generally receive less frequent support from their family.
+            """)
+
+    st.header("Theme 3: Digital Learning and Access", divider=True)
+    
+    # EDA Item 3.1
+    with st.container():
+        col1, col2 = st.columns([3, 2])
+        with col1:
+            st.markdown("""
+            **ICT Resources**:  
+            Grade Repeaters report lower digital access at home.
+            """)
+        with col2:
+            st.image("images/6_EDA_3_Digital_Access.png", 
+                    caption="Figure 6: Grade Repetition vs digital resource availability",
+                    use_container_width=True)
     
 
 # elif menu == "🤖 Final Model":
