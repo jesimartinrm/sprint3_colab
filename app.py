@@ -62,7 +62,7 @@ with st.sidebar:
     menu = st.radio("", [
         "🏠 Landing Page",
         "📊 Data Overview", 
-        "⚙️ Data Prep & Feature Selection",
+        "⚙️ Feature Selection",
         "📈 EDA",
         "🤖 Final Model",
         "💡 Feature Importance",
@@ -97,7 +97,7 @@ if menu == "🏠 Landing Page":
     with col1:
         st.markdown("""
         <div class="metric-card">
-            <h3 style="color: #3730a3; margin: 0;">📚 Total Students</h3>
+            <h3 style="color: #3730a3; margin: 0;">👨 Total Students</h3>
             <p style="font-size: 2rem; margin: 10px 0;">7,193</p>
         </div>
         """, unsafe_allow_html=True)
@@ -125,7 +125,7 @@ if menu == "🏠 Landing Page":
     findings = [
         {"icon": "📚", "title": "Access to Books", 
          "content": "Fewer books of certain types don’t raise the likelihood of predicting a student as a repeater."},
-        {"icon": "👨🎓", "title": "School Engagement", 
+        {"icon": "🎓", "title": "School Engagement", 
          "content": "A student's engagement in school plays a factor in repeating a grade."},
         {"icon": "💻", "title": "Digital Access and Usage", 
          "content": "Less access to digital tools as well as improper usage plays a factor in repeating a grade."},
