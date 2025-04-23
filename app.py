@@ -123,12 +123,20 @@ if menu == "🏠 Landing Page":
     st.header("Key Findings")
     
     findings = [
-        {"icon": "💰", "title": "Socioeconomic Status", 
-         "content": "Students from lower-income families were 45% more likely to repeat grades"},
-        {"icon": "👪", "title": "Parental Involvement", 
-         "content": "Regular parental engagement reduced repetition by 30%"},
-        {"icon": "💻", "title": "Digital Access", 
-         "content": "Limited device access showed strong correlation with repetition"}
+        {"icon": "📚", "title": "Access to Books", 
+         "content": "Fewer books of certain types don’t raise the likelihood of predicting a student as a repeater"},
+        {"icon": "👨🎓", "title": "School Engagement", 
+         "content": "A student's engagement in school plays a factor in repeating a grade"},
+        {"icon": "💻", "title": "Digital Access and Usage", 
+         "content": "Less access to digital tools as well as improper usage plays a factor in repeating a grade"},
+        {"icon": "⏳", "title": "Learning Time", 
+         "content": "More time spent learning leads to better performance and a lower chance of repeating a grade"},
+        {"icon": "📅", "title": "School Absences", 
+         "content": "Prolonged absence in school increases the chance of repeating a grade"},
+        {"icon": "❤️", "title": "Sense of Belonging", 
+         "content": "Increased feelings of safety and belongingness lower the chance of repeating a grade"},
+        {"icon": "🧠", "title": "Student Curiosity", 
+         "content": "The more curious and engaged a student is, the lower the chance of repeating a grade"}
     ]
     
     cols = st.columns(3)
@@ -169,10 +177,10 @@ elif menu == "📊 Data Overview":
         st.pyplot(fig)
 
 # Combined Data Preparation & Feature Selection
-elif menu == "⚙️ Data Prep & Feature Selection":
+elif menu == "⚙️ Feature Selection":
     st.header("Data Preparation & Feature Selection")
     
-    with st.expander("🔧 Feature Engineering Process", expanded=True):
+    with st.expander("🔧 Feature Engineering Process (Summary)", expanded=True):
         col1, col2 = st.columns([1, 2])
         with col1:
             st.markdown("""
@@ -183,7 +191,7 @@ elif menu == "⚙️ Data Prep & Feature Selection":
             - 863: High missing values (484 empty)
             - 55: Collinear features
             - 242: Irrelevant features
-            - 10: Post-OHE removal
+            - 27: Feature Engineering
             """)
             
         with col2:
@@ -197,40 +205,76 @@ elif menu == "⚙️ Data Prep & Feature Selection":
             ax.axis('equal')
             st.pyplot(fig)
 
-# EDA Section with New Format
+    with st.expander("🔧 Feature Engineering Funnel Chart (Detailed)", expanded=True):
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            st.image("images/0_Data_Prep_Funnel_Chart.png", 
+                    caption="Figure 1: Feature Engineering Funnel Chart",
+                    use_container_width=True)
+            
+        with col2:
+            st.markdown("""
+            **Key Observations about the Dataset**:  
+            The dataset initially contained **1,278 features**, but it underwent significant refinement to ensure quality and relevance.  
+
+            - **863 features** were removed because they exceeded the **20% missing value threshold**, with **484 of these being completely empty**, rendering them unusable for analysis.  
+            - An additional **55 features** were eliminated due to **collinearity**, as they provided redundant information.  
+            - **243 features** were removed for being **irrelevant** to the study's objectives, streamlining the dataset further.  
+            - **33 features**, which represented scores in **Math, Reading, and Science**, were consolidated into **two (2) representative features**, reducing dimensionality while preserving critical information.  
+            - Finally, **4 new features** were added after applying **One Hot Encoding and VIF filtering**, enhancing the dataset's quality and utility.  
+
+            By the end of this rigorous filtering process, the dataset was optimized for analysis, retaining only the **90** most meaningful and actionable features.  
+            """)
+    
+
+# EDA Section
 elif menu == "📈 EDA":
     st.header("Exploratory Data Analysis")
     
-    # Example EDA Item 1
+    # EDA Item 1
     with st.container():
         col1, col2 = st.columns([3, 2])
         with col1:
-            st.image("images/grade_repetition_distribution.png", 
-                    caption="Figure 1: Grade Repetition Distribution",
+            st.image("images/1_EDA_Missed_School.png", 
+                    caption="Figure 1: Grade Repetition of Students Missing School",
                     use_container_width=True)
         with col2:
             st.markdown("""
-            **Key Observation**:  
-            25.4% of Filipino students reported repeating at least one grade,
-            significantly higher than the OECD average of 11%. The distribution
-            shows consistent patterns across different geographic regions.
+            **Absences**:  
+            73% of Grade Repeaters have missed school for more than 3 months,
+            indicating strong correlation between absences and chances of repeating a grade.
             """)
     
     st.divider()
     
-    # Example EDA Item 2
+    # EDA Item 2
     with st.container():
         col1, col2 = st.columns([2, 3])
         with col1:
             st.markdown("""
-            **SES vs Repetition Rate**:  
-            Students from lower socioeconomic status (SES) families show
-            3x higher repetition rates compared to high SES counterparts.
+            **Experience in School**:  
+            Grade Repeaters feel less safe, have a weaker sense of belonging, and experience more bullying in school.
             """)
         with col2:
-            st.image("images/ses_vs_repetition.png",
-                    caption="Figure 2: Socioeconomic Status Impact",
+            st.image("images/2_EDA_Safety_and_Belonging.png",
+                    caption="Figure 2: Grade Repetition vs Safety and Belonging",
                     use_container_width=True)
+
+    st.divider()
+
+    # EDA Item 3
+    with st.container():
+        col1, col2 = st.columns([3, 2])
+        with col1:
+            st.image("images/3_EDA_Scores.png", 
+                    caption="Figure 3: Performance on Standardized Exams",
+                    use_container_width=True)
+        with col2:
+            st.markdown("""
+            **Standardized Testing**:  
+            Grade Repeaters perform below average PISA scores for Mathematics, Reading and Science.
+            """)
+    
 
 elif menu == "🤖 Final Model":
     st.header("Grade Repetition Predictor")
