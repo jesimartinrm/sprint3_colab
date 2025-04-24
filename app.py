@@ -399,23 +399,23 @@ elif menu == "🤖 Final Model":
     st.write(holdout_data.head(5))
     
     # Column exploration section
-    with st.expander("📜 Dataset Columns Explorer", expanded=True):
-        st.write("Explore the columns in the holdout dataset:")
+    with st.expander("📜 Dataset Features Explorer", expanded=True):
+        st.write("Explore the features in the holdout dataset:")
         
         # Display column names with checkboxes
         col1, col2 = st.columns([2, 3])
         
         with col1:
-            st.write("### Column Browser")
+            st.write("### Feature Browser")
             columns = holdout_data.columns.tolist()
             selected_columns = st.multiselect(
-                "Select columns to display",
+                "Select features to display",
                 options=columns,
                 default=columns[:5]  # Show first 5 columns by default
             )
         
         with col2:
-            st.write("### Column Data Preview")
+            st.write("### Feature Data Preview")
             if selected_columns:
                 st.dataframe(
                     holdout_data[selected_columns].head(),
@@ -423,15 +423,15 @@ elif menu == "🤖 Final Model":
                     height=300
                 )
             else:
-                st.warning("No columns selected. Please choose columns to view data.")
+                st.warning("No features selected. Please choose features to view data.")
         
-        # Display column statistics
-        st.write("### Column Statistics")
-        col_stats = holdout_data[selected_columns].dtypes
-        st.json({
-            "Column": selected_columns,
-            "Data Type": col_stats.tolist()
-        }, expanded=False)
+        # # Display column statistics
+        # st.write("### Feature Statistics")
+        # col_stats = holdout_data[selected_columns].dtypes
+        # st.json({
+        #     "Column": selected_columns,
+        #     "Data Type": col_stats.tolist()
+        # }, expanded=False)
         
         # Display summary statistics
         st.write("### Summary Statistics")
