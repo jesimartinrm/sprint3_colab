@@ -341,31 +341,37 @@ if menu == "🔄 Machine Learning Pipeline":
             caption="Figure 1: Machine Learning Pipeline",
             use_container_width=True)
     
-    # Model performance comparison
-    st.header("Model Performance Comparison")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.subheader("Random Forest")
-        st.image("path_to_random_forest_performance_chart.png")
-        st.markdown("**Accuracy**: 0.85")
-        st.markdown("**F1 Score**: 0.84")
-        st.markdown("**ROC AUC**: 0.87")
-    
-    with col2:
-        st.subheader("Gradient Boosting")
-        st.image("path_to_gradient_boosting_performance_chart.png")
-        st.markdown("**Accuracy**: 0.88")
-        st.markdown("**F1 Score**: 0.87")
-        st.markdown("**ROC AUC**: 0.89")
-    
-    with col3:
-        st.subheader("Neural Network")
-        st.image("path_to_neural_network_performance_chart.png")
-        st.markdown("**Accuracy**: 0.86")
-        st.markdown("**F1 Score**: 0.85")
-        st.markdown("**ROC AUC**: 0.88")
+    with st.expander("📊 Baseline Results", expanded=True):
+        st.subheader("Model Performance Comparison (Baseline)")
+        
+        # Create a table of baseline results
+        st.markdown("### Baseline Metrics")
+        
+        # Example baseline metrics (replace with your actual results)
+        baseline_results = {
+            "Metric": ["Train Recall", "Validation Recall", "Holdout Recall"],
+            "Decision Tree": ['100%', '55.05%', '64.20%'],
+            "Random Forest": ['100%', '59.63%', '55.80%'],
+            "Gradient Boosting": ['69.14%', '62.68%', '58.93%'],
+            "AdaBoost": ['86.38%', '63.64%', '58.71%'],
+            "XGBoost": ['87.59%', '61.65%', '67.16%'],
+            "CatBoost": ['88.45%', '61.72%', '67.16%'],
+        }
+        
+        # Create a DataFrame for the table
+        df = pd.DataFrame(baseline_results).set_index("Metric")
+        
+        # Display the table
+        st.table(df)
+        
+        # Add interpretation of results
+        st.markdown("""
+        ### Key Observations:
+        - To be filled
+        - To be filled
+        - To be filled
+        - To be filled
+        """)
 
     
 elif menu == "🤖 Final Model":
