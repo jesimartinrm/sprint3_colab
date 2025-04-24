@@ -395,9 +395,51 @@ elif menu == "🤖 Final Model":
     #     st.stop()
 
     # Debugging: Show data overview
-    st.write("Holdout Data Preview:")
-    st.write(holdout_data.head(2))
-    st.write(f"Columns in holdout data: {list(holdout_data.columns)}")
+    st.header("Holdout Data Preview:")
+    st.write(holdout_data.head(5))
+    
+    # Column exploration section
+    with st.expander("📜 Dataset Columns Explorer", expanded=True):
+        st.write("Explore the columns in the holdout dataset:")
+        
+        # Display column names with checkboxes
+        col1, col2 = st.columns([2, 3])
+        
+        with col1:
+            st.write("### Column Browser")
+            columns = holdout_data.columns.tolist()
+            selected_columns = st.multiselect(
+                "Select columns to display",
+                options=columns,
+                default=columns[:5]  # Show first 5 columns by default
+            )
+        
+        with col2:
+            st.write("### Column Data Preview")
+            if selected_columns:
+                st.dataframe(
+                    holdout_data[selected_columns].head(),
+                    use_container_width=True,
+                    height=300
+                )
+            else:
+                st.warning("No columns selected. Please choose columns to view data.")
+        
+        # Display column statistics
+        st.write("### Column Statistics")
+        col_stats = holdout_data[selected_columns].dtypes
+        st.json({
+            "Column": selected_columns,
+            "Data Type": col_stats.tolist()
+        }, expanded=False)
+        
+        # Display summary statistics
+        st.write("### Summary Statistics")
+        summary_stats = holdout_data[selected_columns].describe()
+        st.dataframe(
+            summary_stats.T,
+            use_container_width=True
+        )
 
     try:
         st.write("Preparing holdout data...")
