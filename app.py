@@ -395,11 +395,11 @@ elif menu == "🤖 Final Model":
     #     st.stop()
 
     # Debugging: Show data overview
-    st.header("Holdout Data Preview:")
+    st.header("Holdout Data Preview")
     st.write(holdout_data.head(5))
     
     # Column exploration section
-    with st.expander("📜 Dataset Features Explorer", expanded=True):
+    with st.container():
         st.write("Explore the features in the holdout dataset:")
         
         # Display column names with checkboxes
@@ -425,14 +425,6 @@ elif menu == "🤖 Final Model":
             else:
                 st.warning("No features selected. Please choose features to view data.")
         
-        # # Display column statistics
-        # st.write("### Feature Statistics")
-        # col_stats = holdout_data[selected_columns].dtypes
-        # st.json({
-        #     "Column": selected_columns,
-        #     "Data Type": col_stats.tolist()
-        # }, expanded=False)
-        
         # Display summary statistics
         st.write("### Summary Statistics")
         summary_stats = holdout_data[selected_columns].describe()
@@ -453,12 +445,12 @@ elif menu == "🤖 Final Model":
         y_pred = model.predict(X_holdout)
         
         # Create columns for metrics
-        st.write("Creating metrics display...")
+        st.write("Model Performance Metrics:")
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            accuracy = accuracy_score(y_true, y_pred)
-            st.metric("Accuracy", f"{accuracy:.1%}")
+            precision = precision_score(y_true, y_pred)
+            st.metric("Precision", f"{precision:.2f}")
         
         with col2:
             f1 = f1_score(y_true, y_pred)
@@ -469,10 +461,10 @@ elif menu == "🤖 Final Model":
             st.metric("ROC AUC", f"{roc_auc:.2f}")
             
     except Exception as e:
-        st.error(f"Processing error: {str(e)}")
+        st.error(f"Error calculating model performance: {e}")
         st.stop()
 
-    st.success("Section loaded successfully!")
+    st.success("Model performance metrics loaded successfully!")
 
     # # Prediction form
     # with st.form("prediction_form"):
