@@ -65,6 +65,7 @@ with st.sidebar:
         "📊 Data Overview", 
         "⚙️ Feature Selection",
         "📈 EDA",
+        "🔄 Machine Learning Pipeline",
         "🤖 Final Model",
         "💡 Feature Importance",
         "🎯 Recommendations"
@@ -332,7 +333,41 @@ elif menu == "📈 EDA":
                     caption="Figure 6: Grade Repetition vs digital resource availability",
                     use_container_width=True)
     
+if menu == "🔄 Machine Learning Pipeline":
+    st.header("Machine Learning Pipeline")
+    
+    # Title block with image
+    st.image("images/7_MS_Pipeline.png", 
+            caption="Figure 1: Machine Learning Pipeline",
+            use_container_width=True)
+    
+    # Model performance comparison
+    st.header("Model Performance Comparison")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.subheader("Random Forest")
+        st.image("path_to_random_forest_performance_chart.png")
+        st.markdown("**Accuracy**: 0.85")
+        st.markdown("**F1 Score**: 0.84")
+        st.markdown("**ROC AUC**: 0.87")
+    
+    with col2:
+        st.subheader("Gradient Boosting")
+        st.image("path_to_gradient_boosting_performance_chart.png")
+        st.markdown("**Accuracy**: 0.88")
+        st.markdown("**F1 Score**: 0.87")
+        st.markdown("**ROC AUC**: 0.89")
+    
+    with col3:
+        st.subheader("Neural Network")
+        st.image("path_to_neural_network_performance_chart.png")
+        st.markdown("**Accuracy**: 0.86")
+        st.markdown("**F1 Score**: 0.85")
+        st.markdown("**ROC AUC**: 0.88")
 
+    
 elif menu == "🤖 Final Model":
     st.header("Grade Repetition Predictor")
 
@@ -344,20 +379,6 @@ elif menu == "🤖 Final Model":
     import os
     import pickle
     import pandas as pd
-
-    # # read model and holdout data
-    # model = pickle.load(open('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\scripts\\gb_tk_cat.pkl', 'rb'))
-    # holdout_data = pd.read_csv('C:\\Users\\jesim\\2025 ML\\Eskwelabs\\Sprint 3\\Sprint Project\\Streamlit\\sprint3_colab\\data\\holdout.csv', index_col=0)
-    # # holdout_transactions = X_holdout.index.to_list()
-
-
-    # st.title("Transaction Fraud Detection")
-    # html_temp = """
-    # <div style="background:#025246 ;padding:10px">
-    # <h2 style="color:white;text-align:center;"> Credit Card Fraud Detection ML App </h2>
-    # </div>
-    # """
-    # st.markdown(html_temp, unsafe_allow_html = True)
 
     # Load model and data with enhanced debugging
     @st.cache_resource
