@@ -390,9 +390,9 @@ elif menu == "🤖 Final Model":
         model = load_model()
         holdout_data = load_holdout()
 
-    if model is None or holdout_data is None:
-        st.error("Critical resources failed to load. Stopping execution.")
-        st.stop()
+    # if model is None or holdout_data is None:
+    #     st.error("Critical resources failed to load. Stopping execution.")
+    #     st.stop()
 
     # Debugging: Show data overview
     st.write("Holdout Data Preview:")
